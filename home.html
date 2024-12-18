@@ -41,6 +41,8 @@
                 <th>Guild 2</th>
                 <th>Guild 3</th>
                 <th>Guild 4</th>
+                <th>Daily Points</th>
+                <th>Total Points</th>
             </tr>
         </thead>
         <tbody id="distributionBody">
@@ -62,19 +64,29 @@
             const tableBody = document.getElementById('distributionBody');
             tableBody.innerHTML = '';
 
-            let dayPoints = [0, 0, 0, 0, 0, 0];
+            let totalPoints = [0, 0, 0, 0];
             for (let day = 1; day <= 6; day++) {
                 let row = document.createElement('tr');
                 let dayCell = document.createElement('td');
                 dayCell.textContent = `Day ${day}`;
                 row.appendChild(dayCell);
 
-                guilds.forEach(guild => {
+                let dailyPoints = 0;
+                guilds.forEach((guild, index) => {
                     let cell = document.createElement('td');
                     cell.textContent = points[guild];
                     row.appendChild(cell);
-                    dayPoints[day - 1] += points[guild];
+                    dailyPoints += points[guild];
+                    totalPoints[index] += points[guild];
                 });
+
+                let dailyPointsCell = document.createElement('td');
+                dailyPointsCell.textContent = dailyPoints;
+                row.appendChild(dailyPointsCell);
+
+                let totalPointsCell = document.createElement('td');
+                totalPointsCell.textContent = totalPoints.reduce((a, b) => a + b, 0);
+                row.appendChild(totalPointsCell);
 
                 tableBody.appendChild(row);
             }

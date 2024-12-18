@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guild Property Distribution</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guild Property Distribution</h1>
+    <form id="guildForm">
+        <label for="guild1">Guild 1: </label>
+        <input type="text" id="guild1" name="guild1" required>
+        <label for="guild2">Guild 2: </label>
+        <input type="text" id="guild2" name="guild2" required>
+        <label for="guild3">Guild 3: </label>
+        <input type="text" id="guild3" name="guild3" required>
+        <label for="guild4">Guild 4: </label>
+        <input type="text" id="guild4" name="guild4" required>
+        <button type="button" onclick="distributeProperties()">Distribute</button>
+    </form>
+    <h2>Property Distribution</h2>
+    <table id="distributionTable">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Guild 1</th>
+                <th>Guild 2</th>
+                <th>Guild 3</th>
+                <th>Guild 4</th>
+            </tr>
+        </thead>
+        <tbody id="distributionBody">
+        </tbody>
+    </table>
+
+    <script>
+        function distributeProperties() {
+            const guild1 = document.getElementById('guild1').value;
+            const guild2 = document.getElementById('guild2').value;
+            const guild3 = document.getElementById('guild3').value;
+            const guild4 = document.getElementById('guild4').value;
+
+            const guilds = [guild1, guild2, guild3, guild4];
+
+            const points = { 'A': 1, 'B': 1, 'C': 1, 'D': 1, 'E': 1, 'F': 1, 'G': 1, 'H': 1, 'J': 1, 'K': 1, 'L': 1, 'M': 1, 'N': 1, 'O': 1, 'P': 1, 'Q': 1, 'DW': 3 };
+            guilds.forEach(guild => { points[guild] = 2 });
+
+            const tableBody = document.getElementById('distributionBody');
+            tableBody.innerHTML = '';
+
+            let dayPoints = [0, 0, 0, 0, 0, 0];
+            for (let day = 1; day <= 6; day++) {
+                let row = document.createElement('tr');
+                let dayCell = document.createElement('td');
+                dayCell.textContent = `Day ${day}`;
+                row.appendChild(dayCell);
+
+                guilds.forEach(guild => {
+                    let cell = document.createElement('td');
+                    cell.textContent = points[guild];
+                    row.appendChild(cell);
+                    dayPoints[day - 1] += points[guild];
+                });
+
+                tableBody.appendChild(row);
+            }
+        }
+    </script>
+</body>
+</html>

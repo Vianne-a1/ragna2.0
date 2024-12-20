@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guild Simulation</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Guild Simulation</h1>
+    <div id="input-container">
+        <h2>Enter Guild Information</h2>
+        <form action="/simulate" method="POST">
+            {% for i in range(1, 5) %}
+            <div>
+                <h3>Guild {{ i }}</h3>
+                <label for="guild{{ i }}_name">Name: </label>
+                <input type="text" id="guild{{ i }}_name" name="guild{{ i }}_name" required><br>
+                <label for="guild{{ i }}_properties">Starting Properties (comma separated): </label>
+                <input type="text" id="guild{{ i }}_properties" name="guild{{ i }}_properties" required><br>
+            </div>
+            {% endfor %}
+            <button type="submit">Start Simulation</button>
+        </form>
+    </div>
+
+    {% if error %}
+    <div class="error">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+
+    {% if ownership and points %}
+    <div id="output-container">
+        <h2>Simulation Results</h2>
+        <h3>Property Ownership by Guild</h3>
+        <table id="property-ownership">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    {% for day in range(1, 7) %}
+                    <th>Day {{ day }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for day, data in ownership.items() %}
+                    {% for guild, properties in data.items() %}
+                        {% for property in properties %}
+                            <tr>
+                                <td>{{ property }}</td>
+                                {% for d in range(1, 7) %}
+                                    <td>{% if property in ownership[d][guild] %}{{ guild }}{% else %}{% endif %}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3>Guild Points by Day</h3>
+        <table id="guild-points">
+            <thead>
+                <tr>
+                    <th>Guild</th>
+                    {% for day in range(1, 7) %}
+                    <th>Day {{ day }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild, data in points.items() %}
+                <tr>
+                    <td>{{ guild }}</td>
+                    {% for day, point in data.items() %}
+                    <td>{{ point }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</body>
+</html>
